@@ -276,15 +276,12 @@ function resetlogosettings() {
     }
 }
 
-function smallenvelop_login_message( $message ) {
-    if ( empty($message) ){
-        return "<p><strong>Welcome to SmallEnvelop. Please login to continue</strong></p>";
-    } else {
-        return $message;
-    }
+add_action('login_form', 'wdm_login_form_captcha');
+function wdm_login_form_captcha()
+{?>
+<div class="hello_world"> hello world </div>
+    <?php
 }
-
-add_filter( 'login_message', 'smallenvelop_login_message' );
 
 //loading logo settings
 function applying_wp_custom_login_settings() {
@@ -306,15 +303,21 @@ function applying_wp_custom_login_settings() {
             body.login div#login h1 a {
                 display:none;
             }
-            .tab{
-            justify-content: center;
-            text-align: center;
-            font-size: 22px;
-            margin-right: 15px;
-            padding-bottom: 5px;
-            margin: 0 0px 10px 0;
-            display: inline-block;
-            border-bottom: 2px solid #1161ee; /* Параметры линии */ 
+            body.login .hello_world{
+                justify-content: center;
+                text-align: center;
+                font-size: 22px;
+                margin-right: 15px;
+                padding-bottom: 5px;
+                margin: 0 0px 10px 0;
+                display: inline-block;
+                border-bottom: 2px solid #1161ee; /* Параметры линии */ 
+                position: fixed;
+                left: 50%;
+                margin-right: -50%;
+                transform: translate(-50%, -50%);
+                margin-top:-270px;
+                
             }
             .login form {
                 background-image: url('<?php echo $LogoUrl; ?>') !important;
@@ -327,20 +330,20 @@ function applying_wp_custom_login_settings() {
                 position: fixed !important;
                 top: 50%; left: 50% !important;
                 transform: translate(-50%, -50%);
-                
+                z-index:1 !important;
             }
             .login form .submit #wp-submit, #user_pass, #user_login{
             width: 100% !important;
             display: block;
-            min-height: 50px;
+            min-height: 60px;
             border: none;
             padding: 15px 50px;
             border-radius: 25px;
-            font-size: 12pt;
+            font-size: 14pt;
             text-align: center;
             }
             .login form .submit #wp-submit{
-                background: #1161ee;
+                background: #1161ee !important;
 
             }
             .login form p{
