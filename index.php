@@ -116,10 +116,10 @@ function webriti_login_page(){ ?>
 
         //settings save js function
         function savesettings() {
-            var EnableLogo = jQuery('input[type="radio"]:checked').val();
+            //var EnableLogo = jQuery('input[type="radio"]:checked').val();
             var LogoUrl = jQuery("#logo-url").val();
-            var CustomBGColor = jQuery("#custom-background-color").val();
-            var PostData = "action=save_logo_settings&EnableLogo=" + EnableLogo + "&LogoUrl=" + LogoUrl + "&CustomBGColor=" + CustomBGColor;
+           // var CustomBGColor = jQuery("#custom-background-color").val();
+            var PostData = "action=save_logo_settings&LogoUrl=" + LogoUrl;
             jQuery.ajax({
                 dataType : 'html',
                 type: 'POST',
@@ -186,9 +186,9 @@ border-bottom-color: #F1F1F1;
                         <div class="inside" style="padding-right:10px">
                             <?php
                                 $Settings = get_option('wp_login_logo_settings');
-                                $EnableLogo = $Settings['enable_logo'];
+                                //$EnableLogo = $Settings['enable_logo'];
                                 $LogoUrl = $Settings['logo_url'];
-                                $CustomBGColor = $Settings['custom_bg_color'];
+                                //$CustomBGColor = $Settings['custom_bg_color'];
                             ?>
                             <?php add_thickbox(); ?>
                             <div id="check-preview" style="display:none; text-align: center;">
@@ -201,10 +201,12 @@ border-bottom-color: #F1F1F1;
                                     <tr>
                                         <td><label><?php _e("Upload Custom Logo", "WebritiCustomLoginTD"); ?></label></td>
                                         <td>
+                                            
+                                            
+                                            <img src="<?php echo $LogoUrl; ?>" class="logo-prv" id="logo-img-prv" alt="" style="width:100% height=100" <?php if($LogoUrl == "") echo "style='display:none;'"; ?>>
+                                            <div id="img-prev">
                                             <input type="text" id="logo-url" placeholder="No media selected!"  readonly="readonly" value="<?php if($LogoUrl) echo $LogoUrl; ?>" />
                                             <input type="button" id="upload-logo" class="button upimg" value="Upload Logo"/>
-                                            <div id="img-prev">
-                                                <img src="<?php echo $LogoUrl; ?>" class="logo-prv" id="logo-img-prv" alt="" <?php if($LogoUrl == "") echo "style='display:none;'"; ?>>
                                             </div>
                                         </td>
                                     </tr>
@@ -249,13 +251,13 @@ add_action("wp_ajax_save_logo_settings", "savelogosettings");
 function savelogosettings() {
     if(isset($_POST['action']) == "save_logo_settings") {
         print_r($_POST);
-        $EnableLogo = $_POST['EnableLogo'];
+        //$EnableLogo = $_POST['EnableLogo'];
         $LogoUrl = $_POST['LogoUrl'];
-        $CustomBGColor = $_POST['CustomBGColor'];
+        //$CustomBGColor = $_POST['CustomBGColor'];
         $Settings = array(
-            'enable_logo' => $EnableLogo,
+            //'enable_logo' => $EnableLogo,
             'logo_url' => $LogoUrl,
-            'custom_bg_color' => $CustomBGColor
+            //'custom_bg_color' => $CustomBGColor
         );
         update_option('wp_login_logo_settings', $Settings);
     }
@@ -274,30 +276,81 @@ function resetlogosettings() {
     }
 }
 
+function smallenvelop_login_message( $message ) {
+    if ( empty($message) ){
+        return "<p><strong>Welcome to SmallEnvelop. Please login to continue</strong></p>";
+    } else {
+        return $message;
+    }
+}
+
+add_filter( 'login_message', 'smallenvelop_login_message' );
 
 //loading logo settings
 function applying_wp_custom_login_settings() {
     $Settings = get_option('wp_login_logo_settings');
-    $EnableLogo = $Settings['enable_logo'];
+    //$EnableLogo = $Settings['enable_logo'];
     $LogoUrl = $Settings['logo_url'];
-    $CustomBGColor = $Settings['custom_bg_color'];
-    if($EnableLogo == 'yes') { ?>
+    //$CustomBGColor = $Settings['custom_bg_color'];
+    //if($EnableLogo == 'yes') { ?>
         <style type="text/css">
         <?php
         if($CustomBGColor != "") { ?>
-            body {
+            /* body {
                 background-color: <?php echo $CustomBGColor; ?> !important;
-            }
+            } */
         <?php
         }
         if($LogoUrl != "") {
         ?>
             body.login div#login h1 a {
-                background-image: url('<?php echo $LogoUrl; ?>');
-                max-height: 67px;
-                max-width: 326px;
-                width: auto;
-                overflow: hidden;
+                display:none;
+            }
+            .tab{
+            justify-content: center;
+            text-align: center;
+            font-size: 22px;
+            margin-right: 15px;
+            padding-bottom: 5px;
+            margin: 0 0px 10px 0;
+            display: inline-block;
+            border-bottom: 2px solid #1161ee; /* Параметры линии */ 
+            }
+            .login form {
+                background-image: url('<?php echo $LogoUrl; ?>') !important;
+                margin: auto;
+                display: block;
+                max-width:500px;
+                max-height:500px;
+                box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19) !important;
+                padding: 120px 120px 100px 120px !important; 
+                position: fixed !important;
+                top: 50%; left: 50% !important;
+                transform: translate(-50%, -50%);
+                
+            }
+            .login form .submit #wp-submit, #user_pass, #user_login{
+            width: 100% !important;
+            display: block;
+            min-height: 50px;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 25px;
+            font-size: 12pt;
+            text-align: center;
+            }
+            .login form .submit #wp-submit{
+                background: #1161ee;
+
+            }
+            .login form p{
+                color: #aaa;
+                font-size: 12px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                text-align:  center !important; 
+                margin:20px;
             }
         <?php
         } ?>
@@ -307,8 +360,43 @@ function applying_wp_custom_login_settings() {
             .login #nav a {
                 text-shadow: none;
             }
+           
+            .login form .forgetmenot label{
+                display: none;
+            }
+            .login #nav a{
+                display: none;
+            }
+            .login #backtoblog a{
+                display: none;
+            }
+            
         </style><?php
-    }
+   //}
+
 }
-add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings' );
+add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings', 10,0 );
+
+
+ function gettext_filter($translation, $orig, $domain) {
+    
+    switch($orig) {
+        case 'Username or Email Address':
+            $translation = "Username";
+            break;
+        case 'Username':
+            $translation = "Username";
+            break;
+        case 'Password':
+            $translation = 'Password';
+            break;
+        case 'Log In':
+            $translation = 'Увійти';
+            break;
+        
+    }
+    return $translation;
+}
+add_filter('gettext', 'gettext_filter', 10, 3); 
+
 
