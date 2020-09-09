@@ -5,10 +5,10 @@
  **/
 
 //plugin install script
-// register_activation_hook( __FILE__, 'WpLogoInstallScript' );
-// function WpLogoInstallScript() {
-//     require_once('install-script.php');
-// }
+ register_activation_hook( __FILE__, 'WpLogoInstallScript' );
+ function WpLogoInstallScript() {
+     require_once('install-script.php');
+ }
 
 // Translate all text & labels of plugin ###
 // add_action('plugins_loaded', 'TranslateWpLoginLogo');
@@ -279,7 +279,17 @@ function resetlogosettings() {
 add_action('login_form', 'wdm_login_form_captcha');
 function wdm_login_form_captcha()
 {?>
-<div class="hello_world"> hello world </div>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script>
+// var picHolder = document.getElementById("user_login");
+// $("#user_login").removeClass("button button-primary button-large");
+// var img = document.createElement("p");
+// img.style.background="#fff";
+// img.classList.add( "myClass" );
+// picHolder.appendChild(img);
+// console.log(img);
+</script>
+<div class="hello_world" id="hello_world"> <h2>Авторизація</h2> </div>
     <?php
 }
 
@@ -290,6 +300,7 @@ function applying_wp_custom_login_settings() {
     $LogoUrl = $Settings['logo_url'];
     //$CustomBGColor = $Settings['custom_bg_color'];
     //if($EnableLogo == 'yes') { ?>
+    
         <style type="text/css">
         <?php
         if($CustomBGColor != "") { ?>
@@ -304,23 +315,29 @@ function applying_wp_custom_login_settings() {
                 display:none;
             }
             body.login .hello_world{
-                justify-content: center;
-                text-align: center;
-                font-size: 22px;
+                justify-content: center; */
+                
                 margin-right: 15px;
                 padding-bottom: 5px;
-                margin: 0 0px 10px 0;
                 display: inline-block;
-                border-bottom: 2px solid #1161ee; /* Параметры линии */ 
+                border-bottom: 2px solid #1161ee;
                 position: fixed;
                 left: 50%;
-                margin-right: -50%;
                 transform: translate(-50%, -50%);
-                margin-top:-270px;
+                margin-top: -270px;
+                text-transform: uppercase;
+                color:#000;
+                
+            }
+            #loginform p.submit, #login form p{
+                margin: 0px ;
+                margin-bottom: 10px;
+                padding:0px;
                 
             }
             .login form {
-                background-image: url('<?php echo $LogoUrl; ?>') !important;
+                
+                background-image: url('<?php echo $LogoUrl; ?>')  !important;
                 margin: auto;
                 display: block;
                 max-width:500px;
@@ -330,7 +347,7 @@ function applying_wp_custom_login_settings() {
                 position: fixed !important;
                 top: 50%; left: 50% !important;
                 transform: translate(-50%, -50%);
-                z-index:1 !important;
+                
             }
             .login form .submit #wp-submit, #user_pass, #user_login{
             width: 100% !important;
@@ -339,8 +356,10 @@ function applying_wp_custom_login_settings() {
             border: none;
             padding: 15px 50px;
             border-radius: 25px;
-            font-size: 14pt;
             text-align: center;
+            margin-top:25px;
+
+            
             }
             .login form .submit #wp-submit{
                 background: #1161ee !important;
@@ -348,7 +367,6 @@ function applying_wp_custom_login_settings() {
             }
             .login form p{
                 color: #aaa;
-                font-size: 12px;
                 margin-top: 10px;
                 margin-bottom: 10px;
                 text-transform: uppercase;
@@ -373,12 +391,12 @@ function applying_wp_custom_login_settings() {
             .login #backtoblog a{
                 display: none;
             }
-            
+
         </style><?php
    //}
 
 }
-add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings', 10,0 );
+add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings' );
 
 
  function gettext_filter($translation, $orig, $domain) {
