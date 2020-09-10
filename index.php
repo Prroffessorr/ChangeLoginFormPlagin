@@ -249,7 +249,7 @@ border-bottom-color: #F1F1F1;
 add_action('login_form', 'wdm_login_form_captcha');
 function wdm_login_form_captcha()
 {   ?>
-<div class="hello_world" id="hello_world"> <h2>Авторизація</h2> </div>
+<div class="authorization" id="authorization"> <h2>Авторизація</h2> </div>
 <?php
 }
 
@@ -294,6 +294,12 @@ function action_function_name_3702(){?>
        nav.detach();
        jQuery('.forgetmenot').detach();
 
+
+    //    $('#login').wrapAll('<div class="filter_blur">');
+    //    var picHolder = document.getElementById("loginform");
+    //    var p = document.createElement("div");
+    //    p.classList.add( "filter_blur" );
+    //    picHolder.append(p);
     });
 </script>
 <?php }

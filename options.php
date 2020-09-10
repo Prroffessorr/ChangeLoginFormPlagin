@@ -54,7 +54,7 @@ function applying_wp_custom_login_settings() {
             .login form .input, .login input[type=text]{
                 
             }
-            body.login .hello_world{
+            body.login .authorization{
                 justify-content: center;
                 margin-right: 15px;
                 padding-bottom: 5px;
@@ -75,8 +75,15 @@ function applying_wp_custom_login_settings() {
                 text-align:center;
                 margin-top: 20px;
                 text-transform: uppercase;
-                color:#ff8d00;
-               
+                color: #000 ;
+                font: 600 16px/18px 'Open Sans', sans-serif !important;
+                border-radius: 25px;
+                background: #ff8d00;
+                padding: 5px;
+                position: fixed;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                margin-top: 130px;
             }
             body #login .message{
                 display: none;
@@ -91,11 +98,9 @@ function applying_wp_custom_login_settings() {
                 padding:0px;
                 
             }
-            img {
-            filter: grayscale(100%);
-                }
+            
             .login form {
-                background-image: url('<?php echo $LogoUrl; ?>')  !important;
+                background-image: url('<?php echo $LogoUrl; ?>') !important;
                 background-position: center !important; 
                 background-repeat: no-repeat !important; 
                 background-size: cover !important;
@@ -107,7 +112,7 @@ function applying_wp_custom_login_settings() {
                 position: fixed !important;
                 top: 50%; left: 50% !important;
                 transform: translate(-50%, -50%);
-                z-index:2;
+
                 
             }
             .login form .submit #wp-submit, #user_pass, #user_login{
@@ -119,7 +124,7 @@ function applying_wp_custom_login_settings() {
             border-radius: 25px;
             text-align: center;
             margin-top:25px;
-            z-index:3;
+            z-index:2;
             
             }
             .login form .submit #wp-submit{
