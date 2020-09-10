@@ -41,6 +41,7 @@ function applying_wp_custom_login_settings() {
         <?php
         if($CustomBGColor != "") { ?>
             body {
+                
                 background-color: <?php echo $CustomBGColor; ?> !important;
             } 
         <?php
@@ -50,9 +51,11 @@ function applying_wp_custom_login_settings() {
             body.login div#login h1 a {
                 display:none;
             }
-            body.login .hello_world{
-                justify-content: center; */
+            .login form .input, .login input[type=text]{
                 
+            }
+            body.login .hello_world{
+                justify-content: center;
                 margin-right: 15px;
                 padding-bottom: 5px;
                 display: inline-block;
@@ -60,10 +63,22 @@ function applying_wp_custom_login_settings() {
                 position: fixed;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                margin-top: -270px;
+                margin-top: -300px;
                 text-transform: uppercase;
                 color:#000;
-                
+               
+            }
+            body.login #error_message{
+                display: none;
+                padding-bottom: 5px;
+                text-align:center;
+                margin-top: 20px;
+                text-transform: uppercase;
+                color:#ff8d00;
+                font: 600 16px/18px 'Open Sans', sans-serif !important;
+            }
+            body #login .message{
+                display: none;
             }
             #loginform p.submit, #login form p{
                 margin: 0px ;
@@ -94,12 +109,11 @@ function applying_wp_custom_login_settings() {
             border-radius: 25px;
             text-align: center;
             margin-top:25px;
-
             
             }
             .login form .submit #wp-submit{
                 background: #1161ee !important;
-
+                font: 600 16px/18px 'Open Sans', sans-serif !important;
             }
             .login form p{
                 color: #aaa;

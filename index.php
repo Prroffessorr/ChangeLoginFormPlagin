@@ -245,7 +245,7 @@ border-bottom-color: #F1F1F1;
 add_action('login_form', 'wdm_login_form_captcha');
 function wdm_login_form_captcha()
 {?>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 <script>
 // var picHolder = document.getElementById("user_login");
 // $("#user_login").removeClass("button button-primary button-large");
@@ -259,4 +259,30 @@ function wdm_login_form_captcha()
     <?php
 }
 
+//Errors Message
 
+function wd_login_form_captcha()
+{ ?>
+
+<div class="error_message" id="error_message">
+	<span>Ошибка авторизации</span>
+</div>
+
+<script>
+    document.getElementById("error_message").style.display = "block"; 
+    use = document.getElementById("user_pass");
+    use.onclick = function(event) {
+        document.getElementById("error_message").style.display = "none"; 
+    }
+
+</script>
+
+<?php 
+
+}
+//Hooks for creating errors messages;
+function show_hide_errors()
+{
+    add_action('login_form', 'wd_login_form_captcha');
+}
+add_filter( 'login_errors', "show_hide_errors" );
