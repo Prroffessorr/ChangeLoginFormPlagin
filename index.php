@@ -107,6 +107,7 @@ function webriti_login_page(){ ?>
         }
     </style>
     <script>
+   
         // hide n show upload button
         jQuery('#enable-custom-logo').click(function(){
             if (jQuery(this).is(':checked', true)) {
@@ -114,6 +115,7 @@ function webriti_login_page(){ ?>
             } else {
                 alert(2);
             }
+            
         });
 
         //settings save js function
@@ -266,15 +268,35 @@ var login_error = jQuery('#login_error');
     use = document.getElementById("user_pass");
     use.onclick = function(event) {
         document.getElementById("error_message").style.display = "none"; 
+        
     }
 </script>
-
+ <script>
+    
+    </script>
 <?php 
 
 }
 //Hooks for creating errors messages;
 function show_hide_errors()
 {
-    add_action('login_form', 'wd_login_form_captcha');
+    add_action('login_form', 'wd_login_form_captcha', 10);
 }
-add_filter( 'login_errors', "show_hide_errors" );?>
+add_filter( 'login_errors', "show_hide_errors" );
+
+add_action( 'login_init', 'action_function_name_3702' );
+function action_function_name_3702(){?>
+    <script>
+     $(document).ready(function(){
+       document.getElementById("user_login").placeholder = "Enter the username";
+       document.getElementById("user_login").value = "";
+       document.getElementById("user_pass").placeholder = "Enter the password";
+       var backtoblog = jQuery('#backtoblog');
+       backtoblog.detach();
+       var nav = jQuery('#nav');
+       nav.detach();
+       jQuery('.forgetmenot').detach();
+
+    });
+</script>
+<?php }

@@ -42,8 +42,8 @@ function applying_wp_custom_login_settings() {
         if($CustomBGColor != "") { ?>
             body {
                 
-                background-color: <?php echo $CustomBGColor; ?> !important;
-            } 
+                 background-color: <?php echo $CustomBGColor; ?> !important; 
+            }  
         <?php
         }
         if($LogoUrl != "") {
@@ -76,12 +76,16 @@ function applying_wp_custom_login_settings() {
                 margin-top: 20px;
                 text-transform: uppercase;
                 color:#ff8d00;
-                font: 600 16px/18px 'Open Sans', sans-serif !important;
+               
             }
             body #login .message{
                 display: none;
             }
-            #loginform p.submit, #login form p{
+            
+        <?php
+        } ?>
+           
+        #loginform p.submit, #login form p{
                 margin: 0px ;
                 margin-bottom: 10px;
                 padding:0px;
@@ -95,7 +99,7 @@ function applying_wp_custom_login_settings() {
                 max-width:500px;
                 max-height:500px;
                 box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19) !important;
-                padding: 120px 120px 100px 120px !important; 
+                padding: 120px 90px 120px 90px !important; 
                 position: fixed !important;
                 top: 50%; left: 50% !important;
                 transform: translate(-50%, -50%);
@@ -115,6 +119,7 @@ function applying_wp_custom_login_settings() {
             .login form .submit #wp-submit{
                 background: #1161ee !important;
                 font: 600 16px/18px 'Open Sans', sans-serif !important;
+                text-transform:uppercase;
             }
             .login form p{
                 color: #aaa;
@@ -124,23 +129,9 @@ function applying_wp_custom_login_settings() {
                 text-align:  center !important; 
                 margin:20px;
             }
-        <?php
-        } ?>
-            .login #nav a {
-                text-shadow: none;
-            }
-           
-            .login form .forgetmenot label{
-                display: none;
-            }
-            .login #nav a{
-                display: none;
-            }
-            .login #backtoblog a{
-                display: none;
-            }
 
-        </style><?php
+        </style>
+        <?php
    //}
 
 }
