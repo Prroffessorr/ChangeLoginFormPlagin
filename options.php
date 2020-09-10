@@ -68,6 +68,7 @@ function applying_wp_custom_login_settings() {
                 color:#000;
                
             }
+
             body.login #error_message{
                 display: none;
                 padding-bottom: 5px;
@@ -125,9 +126,6 @@ function applying_wp_custom_login_settings() {
             }
         <?php
         } ?>
-            .login #backtoblog a {
-                text-shadow: none;
-            }
             .login #nav a {
                 text-shadow: none;
             }

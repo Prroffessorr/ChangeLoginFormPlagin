@@ -4,6 +4,8 @@
  * Plugin Name: MyFirst Plugin
  **/
 include 'options.php';
+?> <script type="text/javascript" href="<?php plugins_url('assets/js/option.js', __FILE__) ?> "></script> <?php
+?> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  <?php
 //plugin install script
  register_activation_hook( __FILE__, 'WpLogoInstallScript' );
  function WpLogoInstallScript() {
@@ -244,23 +246,12 @@ border-bottom-color: #F1F1F1;
 
 add_action('login_form', 'wdm_login_form_captcha');
 function wdm_login_form_captcha()
-{?>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
-<script>
-// var picHolder = document.getElementById("user_login");
-// $("#user_login").removeClass("button button-primary button-large");
-// var img = document.createElement("p");
-// img.style.background="#fff";
-// img.classList.add( "myClass" );
-// picHolder.appendChild(img);
-// console.log(img);
-</script>
+{   ?>
 <div class="hello_world" id="hello_world"> <h2>Авторизація</h2> </div>
-    <?php
+<?php
 }
 
 //Errors Message
-
 function wd_login_form_captcha()
 { ?>
 
@@ -269,12 +260,13 @@ function wd_login_form_captcha()
 </div>
 
 <script>
+var login_error = jQuery('#login_error');
+    login_error.detach();
     document.getElementById("error_message").style.display = "block"; 
     use = document.getElementById("user_pass");
     use.onclick = function(event) {
         document.getElementById("error_message").style.display = "none"; 
     }
-
 </script>
 
 <?php 
@@ -285,4 +277,4 @@ function show_hide_errors()
 {
     add_action('login_form', 'wd_login_form_captcha');
 }
-add_filter( 'login_errors', "show_hide_errors" );
+add_filter( 'login_errors', "show_hide_errors" );?>
