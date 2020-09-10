@@ -3,7 +3,7 @@
  *
  * Plugin Name: MyFirst Plugin
  **/
-
+include 'options.php';
 //plugin install script
  register_activation_hook( __FILE__, 'WpLogoInstallScript' );
  function WpLogoInstallScript() {
@@ -34,8 +34,8 @@ function logo_css_js() {
     wp_enqueue_script('media-uploads-js',plugins_url('assets/js/js.js', __FILE__), array('media-upload','thickbox','jquery'));
 
     //color-picker css n js
-    // wp_enqueue_style( 'wp-color-picker' );
-    // wp_enqueue_script( 'my-color-picker-script', plugins_url('js/my-color-picker-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    wp_enqueue_style( 'wp-color-picker' );
+    wp_enqueue_script( 'my-color-picker-script', plugins_url('assets/js/my-color-picker-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
     // wp_enqueue_style('my-bootstrap', plugins_url('css/wbr_login_bootstrap.css',__FILE__));
     //css
     // wp_enqueue_style('dashboard');
@@ -118,8 +118,8 @@ function webriti_login_page(){ ?>
         function savesettings() {
             //var EnableLogo = jQuery('input[type="radio"]:checked').val();
             var LogoUrl = jQuery("#logo-url").val();
-           // var CustomBGColor = jQuery("#custom-background-color").val();
-            var PostData = "action=save_logo_settings&LogoUrl=" + LogoUrl;
+            var CustomBGColor = jQuery("#custom-background-color").val();
+            var PostData = "action=save_logo_settings&LogoUrl=" + LogoUrl + "&CustomBGColor=" + CustomBGColor;
             jQuery.ajax({
                 dataType : 'html',
                 type: 'POST',
@@ -188,7 +188,7 @@ border-bottom-color: #F1F1F1;
                                 $Settings = get_option('wp_login_logo_settings');
                                 //$EnableLogo = $Settings['enable_logo'];
                                 $LogoUrl = $Settings['logo_url'];
-                                //$CustomBGColor = $Settings['custom_bg_color'];
+                                $CustomBGColor = $Settings['custom_bg_color'];
                             ?>
                             <?php add_thickbox(); ?>
                             <div id="check-preview" style="display:none; text-align: center;">
@@ -210,7 +210,10 @@ border-bottom-color: #F1F1F1;
                                             </div>
                                         </td>
                                     </tr>
-                                    
+                                    <tr>
+                                        <td><label><?php _e("Custom Background Color", "WebritiCustomLoginTD"); ?></label></td>
+                                        <td><input id="custom-background-color" name="custom-background-color" type="text" value="<?php echo $CustomBGColor; ?>" class="my-color-field" data-default-color="#ffffff" /></td>
+                                    </tr>
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td>
@@ -237,43 +240,6 @@ border-bottom-color: #F1F1F1;
     </div>
 		<?php
 		}
-		if ($SeletedTab=='pro') {
-		?>
-		
-		<!-- <?php //require_once('login_pro.php'); ?> -->
-		<?php
-		}
-}
-
-
-//save plugin settings
-add_action("wp_ajax_save_logo_settings", "savelogosettings");
-function savelogosettings() {
-    if(isset($_POST['action']) == "save_logo_settings") {
-        print_r($_POST);
-        //$EnableLogo = $_POST['EnableLogo'];
-        $LogoUrl = $_POST['LogoUrl'];
-        //$CustomBGColor = $_POST['CustomBGColor'];
-        $Settings = array(
-            //'enable_logo' => $EnableLogo,
-            'logo_url' => $LogoUrl,
-            //'custom_bg_color' => $CustomBGColor
-        );
-        update_option('wp_login_logo_settings', $Settings);
-    }
-}
-
-//reset plugin settings
-add_action("wp_ajax_reset_logo_settings", "resetlogosettings");
-function resetlogosettings() {
-    if(isset($_POST['action']) == "reset_logo_settings") {
-        $Settings = array(
-            'enable_logo' => "no",
-            'logo_url' => "",
-            'custom_bg_color' => ""
-        );
-        update_option('wp_login_logo_settings', $Settings);
-    }
 }
 
 add_action('login_form', 'wdm_login_form_captcha');
@@ -292,132 +258,5 @@ function wdm_login_form_captcha()
 <div class="hello_world" id="hello_world"> <h2>Авторизація</h2> </div>
     <?php
 }
-
-//loading logo settings
-function applying_wp_custom_login_settings() {
-    $Settings = get_option('wp_login_logo_settings');
-    //$EnableLogo = $Settings['enable_logo'];
-    $LogoUrl = $Settings['logo_url'];
-    //$CustomBGColor = $Settings['custom_bg_color'];
-    //if($EnableLogo == 'yes') { ?>
-    
-        <style type="text/css">
-        <?php
-        if($CustomBGColor != "") { ?>
-            /* body {
-                background-color: <?php echo $CustomBGColor; ?> !important;
-            } */
-        <?php
-        }
-        if($LogoUrl != "") {
-        ?>
-            body.login div#login h1 a {
-                display:none;
-            }
-            body.login .hello_world{
-                justify-content: center; */
-                
-                margin-right: 15px;
-                padding-bottom: 5px;
-                display: inline-block;
-                border-bottom: 2px solid #1161ee;
-                position: fixed;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                margin-top: -270px;
-                text-transform: uppercase;
-                color:#000;
-                
-            }
-            #loginform p.submit, #login form p{
-                margin: 0px ;
-                margin-bottom: 10px;
-                padding:0px;
-                
-            }
-            .login form {
-                
-                background-image: url('<?php echo $LogoUrl; ?>')  !important;
-                margin: auto;
-                display: block;
-                max-width:500px;
-                max-height:500px;
-                box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19) !important;
-                padding: 120px 120px 100px 120px !important; 
-                position: fixed !important;
-                top: 50%; left: 50% !important;
-                transform: translate(-50%, -50%);
-                
-            }
-            .login form .submit #wp-submit, #user_pass, #user_login{
-            width: 100% !important;
-            display: block;
-            min-height: 60px;
-            border: none;
-            padding: 15px 50px;
-            border-radius: 25px;
-            text-align: center;
-            margin-top:25px;
-
-            
-            }
-            .login form .submit #wp-submit{
-                background: #1161ee !important;
-
-            }
-            .login form p{
-                color: #aaa;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                text-transform: uppercase;
-                text-align:  center !important; 
-                margin:20px;
-            }
-        <?php
-        } ?>
-            .login #backtoblog a {
-                text-shadow: none;
-            }
-            .login #nav a {
-                text-shadow: none;
-            }
-           
-            .login form .forgetmenot label{
-                display: none;
-            }
-            .login #nav a{
-                display: none;
-            }
-            .login #backtoblog a{
-                display: none;
-            }
-
-        </style><?php
-   //}
-
-}
-add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings' );
-
-
- function gettext_filter($translation, $orig, $domain) {
-    
-    switch($orig) {
-        case 'Username or Email Address':
-            $translation = "Username";
-            break;
-        case 'Username':
-            $translation = "Username";
-            break;
-        case 'Password':
-            $translation = 'Password';
-            break;
-        case 'Log In':
-            $translation = 'Увійти';
-            break;
-        
-    }
-    return $translation;
-}
-add_filter('gettext', 'gettext_filter', 10, 3); 
 
 
