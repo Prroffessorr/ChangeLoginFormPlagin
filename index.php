@@ -271,9 +271,6 @@ var login_error = jQuery('#login_error');
         
     }
 </script>
- <script>
-    
-    </script>
 <?php 
 
 }

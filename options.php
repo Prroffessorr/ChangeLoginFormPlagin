@@ -91,18 +91,23 @@ function applying_wp_custom_login_settings() {
                 padding:0px;
                 
             }
+            img {
+            filter: grayscale(100%);
+                }
             .login form {
-                
                 background-image: url('<?php echo $LogoUrl; ?>')  !important;
-                margin: auto;
-                display: block;
-                max-width:500px;
-                max-height:500px;
+                background-position: center !important; 
+                background-repeat: no-repeat !important; 
+                background-size: cover !important;
+                text-align:center;
+                display: table-cell;
+                vertical-align: middle;
                 box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19) !important;
                 padding: 120px 90px 120px 90px !important; 
                 position: fixed !important;
                 top: 50%; left: 50% !important;
                 transform: translate(-50%, -50%);
+                z-index:2;
                 
             }
             .login form .submit #wp-submit, #user_pass, #user_login{
@@ -114,6 +119,7 @@ function applying_wp_custom_login_settings() {
             border-radius: 25px;
             text-align: center;
             margin-top:25px;
+            z-index:3;
             
             }
             .login form .submit #wp-submit{
