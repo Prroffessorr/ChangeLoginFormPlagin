@@ -2,48 +2,71 @@
 /**
  *
  * Plugin Name: MyFirst Plugin
+ * Version: 0.3
+ * Description: Webriti Custom Login plugin allows admin to customize WordPress admin login page.
+ * Author: Webriti WordPress Themes & Plugins Shop
+ * Author URI: http://www.webriti.com
+ * Plugin URI: http://www.webriti.com
+
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
+?> <script type="text/javascript" href="<?php plugins_url('assets/js/option.js', __FILE__) ?> "></script> <?php
+?> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  <?php
 //plugin install script
- register_activation_hook( __FILE__, 'WpLogoInstallScript' );
- function WpLogoInstallScript() {
-     require_once('install-script.php');
+ register_activation_hook( __FILE__, 'WpChangeLoginPageInstallScript' );
+ function WpChangeLoginPageInstallScript() {
+    ob_start();
+    require_once('install-script.php');
+    require_once('options.php');
+    trigger_error(ob_get_contents());
  }
 
 // Translate all text & labels of plugin ###
-// add_action('plugins_loaded', 'TranslateWpLoginLogo');
-// function TranslateWpLoginLogo() {
-//     load_plugin_textdomain('WebritiCustomLoginTD', FALSE, dirname( plugin_basename(__FILE__)).'/languages/' );
-// }
+add_action('plugins_loaded', 'TranslateWpLoginLogo');
+function TranslateWpLoginLogo() {
+    load_plugin_textdomain('WebritiCustomLoginTD', FALSE, dirname( plugin_basename(__FILE__)).'/languages/' );
+ }
 
 // Admin dashboard Menu Pages For WP Login Logo Plugin
-add_action('admin_menu','wp_login_log_menu');
-function wp_login_log_menu() {
+add_action('admin_menu','wp_login_change_log_page_menu');
+function wp_login_change_log_page_menu() {
     // Wp Login Logo Page in Settings menu
    // add_menu_page('menu page', 'Add data', 'manage_options', 'custom-panel', 'custom_panel');
-    $SubMenu = add_menu_page( 'menu page', 'Add data', 'manage_options', 'webriti-login', 'webriti_login_page' );
-    add_action( 'admin_print_styles-' . $SubMenu, 'logo_css_js' );
+    $SubMenu = add_menu_page( 'menu page', 'Change login page', 'manage_options', 'change-login-page', 'change_login_page_plugin' );
+    add_action( 'admin_print_styles-' . $SubMenu, 'change_logo_page_css_js' );
 }
 
 //load plugin required css and js fiels
-function logo_css_js() {
+function change_logo_page_css_js() {
     //js
-    // wp_enqueue_script('jquery-ui-core', includes_url('/js/jquery/ui/jquery.ui.core.min.js'), array('jquery') );
-    // wp_enqueue_script('dashboard');
-    // wp_enqueue_script( 'theme-preview' );
+    //wp_enqueue_script('jquery-ui-core', includes_url('/js/jquery/ui/jquery.ui.core.min.js'), array('jquery') );
+    wp_enqueue_script('dashboard');
+    wp_enqueue_script( 'theme-preview' );
     wp_enqueue_script('media-uploads-js',plugins_url('assets/js/js.js', __FILE__), array('media-upload','thickbox','jquery'));
 
     //color-picker css n js
-    // wp_enqueue_style( 'wp-color-picker' );
-    // wp_enqueue_script( 'my-color-picker-script', plugins_url('js/my-color-picker-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    wp_enqueue_style( 'wp-color-picker' );
+    wp_enqueue_script( 'my-color-picker-script', plugins_url('assets/js/my-color-picker-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
     // wp_enqueue_style('my-bootstrap', plugins_url('css/wbr_login_bootstrap.css',__FILE__));
     //css
-    // wp_enqueue_style('dashboard');
-    // wp_enqueue_style('thickbox');
+    wp_enqueue_style('dashboard');
+    wp_enqueue_style('thickbox');
 }
 
 //WP Login Logo plugin admin menu page
-function webriti_login_page(){ ?>
+function change_login_page_plugin(){ ?>
     <style type="text/css">
         label {
             margin-right: 20px;
@@ -105,21 +128,13 @@ function webriti_login_page(){ ?>
         }
     </style>
     <script>
-        // hide n show upload button
-        jQuery('#enable-custom-logo').click(function(){
-            if (jQuery(this).is(':checked', true)) {
-                alert(1);
-            } else {
-                alert(2);
-            }
-        });
 
         //settings save js function
         function savesettings() {
             //var EnableLogo = jQuery('input[type="radio"]:checked').val();
             var LogoUrl = jQuery("#logo-url").val();
-           // var CustomBGColor = jQuery("#custom-background-color").val();
-            var PostData = "action=save_logo_settings&LogoUrl=" + LogoUrl;
+            var CustomBGColor = jQuery("#custom-background-color").val();
+            var PostData = "action=save_logo_settings&LogoUrl=" + LogoUrl + "&CustomBGColor=" + CustomBGColor;
             jQuery.ajax({
                 dataType : 'html',
                 type: 'POST',
@@ -188,7 +203,7 @@ border-bottom-color: #F1F1F1;
                                 $Settings = get_option('wp_login_logo_settings');
                                 //$EnableLogo = $Settings['enable_logo'];
                                 $LogoUrl = $Settings['logo_url'];
-                                //$CustomBGColor = $Settings['custom_bg_color'];
+                                $CustomBGColor = $Settings['custom_bg_color'];
                             ?>
                             <?php add_thickbox(); ?>
                             <div id="check-preview" style="display:none; text-align: center;">
@@ -210,7 +225,10 @@ border-bottom-color: #F1F1F1;
                                             </div>
                                         </td>
                                     </tr>
-                                    
+                                    <tr>
+                                        <td><label><?php _e("Custom Background Color", "WebritiCustomLoginTD"); ?></label></td>
+                                        <td><input id="custom-background-color" name="custom-background-color" type="text" value="<?php echo $CustomBGColor; ?>" class="my-color-field" data-default-color="#ffffff" /></td>
+                                    </tr>
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td>
@@ -237,187 +255,62 @@ border-bottom-color: #F1F1F1;
     </div>
 		<?php
 		}
-		if ($SeletedTab=='pro') {
-		?>
-		
-		<!-- <?php //require_once('login_pro.php'); ?> -->
-		<?php
-		}
-}
-
-
-//save plugin settings
-add_action("wp_ajax_save_logo_settings", "savelogosettings");
-function savelogosettings() {
-    if(isset($_POST['action']) == "save_logo_settings") {
-        print_r($_POST);
-        //$EnableLogo = $_POST['EnableLogo'];
-        $LogoUrl = $_POST['LogoUrl'];
-        //$CustomBGColor = $_POST['CustomBGColor'];
-        $Settings = array(
-            //'enable_logo' => $EnableLogo,
-            'logo_url' => $LogoUrl,
-            //'custom_bg_color' => $CustomBGColor
-        );
-        update_option('wp_login_logo_settings', $Settings);
-    }
-}
-
-//reset plugin settings
-add_action("wp_ajax_reset_logo_settings", "resetlogosettings");
-function resetlogosettings() {
-    if(isset($_POST['action']) == "reset_logo_settings") {
-        $Settings = array(
-            'enable_logo' => "no",
-            'logo_url' => "",
-            'custom_bg_color' => ""
-        );
-        update_option('wp_login_logo_settings', $Settings);
-    }
 }
 
 add_action('login_form', 'wdm_login_form_captcha');
 function wdm_login_form_captcha()
-{?>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+{   ?>
+<div class="authorization" id="authorization"> <h2>Авторизація</h2> </div>
+<?php
+}
+
+//Errors Message
+function wd_login_form_captcha()
+{ ?>
+
+<div class="error_message" id="error_message">
+	<span>Ошибка авторизации</span>
+</div>
+
 <script>
-// var picHolder = document.getElementById("user_login");
-// $("#user_login").removeClass("button button-primary button-large");
-// var img = document.createElement("p");
-// img.style.background="#fff";
-// img.classList.add( "myClass" );
-// picHolder.appendChild(img);
-// console.log(img);
-</script>
-<div class="hello_world" id="hello_world"> <h2>Авторизація</h2> </div>
-    <?php
-}
-
-//loading logo settings
-function applying_wp_custom_login_settings() {
-    $Settings = get_option('wp_login_logo_settings');
-    //$EnableLogo = $Settings['enable_logo'];
-    $LogoUrl = $Settings['logo_url'];
-    //$CustomBGColor = $Settings['custom_bg_color'];
-    //if($EnableLogo == 'yes') { ?>
-    
-        <style type="text/css">
-        <?php
-        if($CustomBGColor != "") { ?>
-            /* body {
-                background-color: <?php echo $CustomBGColor; ?> !important;
-            } */
-        <?php
-        }
-        if($LogoUrl != "") {
-        ?>
-            body.login div#login h1 a {
-                display:none;
-            }
-            body.login .hello_world{
-                justify-content: center; */
-                
-                margin-right: 15px;
-                padding-bottom: 5px;
-                display: inline-block;
-                border-bottom: 2px solid #1161ee;
-                position: fixed;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                margin-top: -270px;
-                text-transform: uppercase;
-                color:#000;
-                
-            }
-            #loginform p.submit, #login form p{
-                margin: 0px ;
-                margin-bottom: 10px;
-                padding:0px;
-                
-            }
-            .login form {
-                
-                background-image: url('<?php echo $LogoUrl; ?>')  !important;
-                margin: auto;
-                display: block;
-                max-width:500px;
-                max-height:500px;
-                box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19) !important;
-                padding: 120px 120px 100px 120px !important; 
-                position: fixed !important;
-                top: 50%; left: 50% !important;
-                transform: translate(-50%, -50%);
-                
-            }
-            .login form .submit #wp-submit, #user_pass, #user_login{
-            width: 100% !important;
-            display: block;
-            min-height: 60px;
-            border: none;
-            padding: 15px 50px;
-            border-radius: 25px;
-            text-align: center;
-            margin-top:25px;
-
-            
-            }
-            .login form .submit #wp-submit{
-                background: #1161ee !important;
-
-            }
-            .login form p{
-                color: #aaa;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                text-transform: uppercase;
-                text-align:  center !important; 
-                margin:20px;
-            }
-        <?php
-        } ?>
-            .login #backtoblog a {
-                text-shadow: none;
-            }
-            .login #nav a {
-                text-shadow: none;
-            }
-           
-            .login form .forgetmenot label{
-                display: none;
-            }
-            .login #nav a{
-                display: none;
-            }
-            .login #backtoblog a{
-                display: none;
-            }
-
-        </style><?php
-   //}
-
-}
-add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings' );
-
-
- function gettext_filter($translation, $orig, $domain) {
-    
-    switch($orig) {
-        case 'Username or Email Address':
-            $translation = "Username";
-            break;
-        case 'Username':
-            $translation = "Username";
-            break;
-        case 'Password':
-            $translation = 'Password';
-            break;
-        case 'Log In':
-            $translation = 'Увійти';
-            break;
+var login_error = jQuery('#login_error');
+    login_error.detach();
+    document.getElementById("error_message").style.display = "block"; 
+    use = document.getElementById("user_pass");
+    use.onclick = function(event) {
+    document.getElementById("error_message").style.display = "none"; 
         
     }
-    return $translation;
+</script>
+<?php 
+
 }
-add_filter('gettext', 'gettext_filter', 10, 3); 
+//Hooks for creating errors messages;
+function show_hide_errors()
+{
+    add_action('login_form', 'wd_login_form_captcha', 10);
+}
+add_filter( 'login_errors', "show_hide_errors" );
+
+add_action( 'login_init', 'action_function_name_3702' );
+function action_function_name_3702(){?>
+    <script>
+     $(document).ready(function(){
+       document.getElementById("user_login").placeholder = "Enter the username";
+       document.getElementById("user_login").value = "";
+       document.getElementById("user_pass").placeholder = "Enter the password";
+       var backtoblog = jQuery('#backtoblog');
+       backtoblog.detach();
+       var nav = jQuery('#nav');
+       nav.detach();
+       jQuery('.forgetmenot').detach();
 
 
+    //    $('#login').wrapAll('<div class="filter_blur">');
+    //    var picHolder = document.getElementById("loginform");
+    //    var p = document.createElement("div");
+    //    p.classList.add( "filter_blur" );
+    //    picHolder.append(p);
+    });
+</script>
+<?php }
