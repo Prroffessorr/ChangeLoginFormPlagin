@@ -1,7 +1,7 @@
 <?php
 //save plugin settings
-add_action("wp_ajax_save_logo_settings", "savelogosettings");
-function savelogosettings() {
+add_action("wp_ajax_save_logo_settings", "savelogopagesettings");
+function savelogopagesettings() {
     if(isset($_POST['action']) == "save_logo_settings") {
         print_r($_POST);
         //$EnableLogo = $_POST['EnableLogo'];
@@ -17,8 +17,8 @@ function savelogosettings() {
 }
 
 //reset plugin settings
-add_action("wp_ajax_reset_logo_settings", "resetlogosettings");
-function resetlogosettings() {
+add_action("wp_ajax_reset_logo_settings", "resetlogopagesettings");
+function resetlogopagesettings() {
     if(isset($_POST['action']) == "reset_logo_settings") {
         $Settings = array(
             //'enable_logo' => "no",
@@ -30,7 +30,7 @@ function resetlogosettings() {
 }
 
 //loading logo settings
-function applying_wp_custom_login_settings() {
+function applying_wp_custom_login_page_settings() {
     $Settings = get_option('wp_login_logo_settings');
     //$EnableLogo = $Settings['enable_logo'];
     $LogoUrl = $Settings['logo_url'];
@@ -146,7 +146,7 @@ function applying_wp_custom_login_settings() {
    //}
 
 }
-add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_settings' );
+add_action( 'login_enqueue_scripts', 'applying_wp_custom_login_page_settings' );
 
 
  function gettext_filter($translation, $orig, $domain) {

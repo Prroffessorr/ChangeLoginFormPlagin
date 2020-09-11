@@ -2,37 +2,58 @@
 /**
  *
  * Plugin Name: MyFirst Plugin
+ * Version: 0.3
+ * Description: Webriti Custom Login plugin allows admin to customize WordPress admin login page.
+ * Author: Webriti WordPress Themes & Plugins Shop
+ * Author URI: http://www.webriti.com
+ * Plugin URI: http://www.webriti.com
+
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
-include 'options.php';
+
 ?> <script type="text/javascript" href="<?php plugins_url('assets/js/option.js', __FILE__) ?> "></script> <?php
 ?> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  <?php
 //plugin install script
- register_activation_hook( __FILE__, 'WpLogoInstallScript' );
- function WpLogoInstallScript() {
-     require_once('install-script.php');
+ register_activation_hook( __FILE__, 'WpChangeLoginPageInstallScript' );
+ function WpChangeLoginPageInstallScript() {
+    ob_start();
+    require_once('install-script.php');
+    require_once('options.php');
+    trigger_error(ob_get_contents());
  }
 
 // Translate all text & labels of plugin ###
-// add_action('plugins_loaded', 'TranslateWpLoginLogo');
-// function TranslateWpLoginLogo() {
-//     load_plugin_textdomain('WebritiCustomLoginTD', FALSE, dirname( plugin_basename(__FILE__)).'/languages/' );
-// }
+add_action('plugins_loaded', 'TranslateWpLoginLogo');
+function TranslateWpLoginLogo() {
+    load_plugin_textdomain('WebritiCustomLoginTD', FALSE, dirname( plugin_basename(__FILE__)).'/languages/' );
+ }
 
 // Admin dashboard Menu Pages For WP Login Logo Plugin
-add_action('admin_menu','wp_login_log_menu');
-function wp_login_log_menu() {
+add_action('admin_menu','wp_login_change_log_page_menu');
+function wp_login_change_log_page_menu() {
     // Wp Login Logo Page in Settings menu
    // add_menu_page('menu page', 'Add data', 'manage_options', 'custom-panel', 'custom_panel');
-    $SubMenu = add_menu_page( 'menu page', 'Add data', 'manage_options', 'webriti-login', 'webriti_login_page' );
-    add_action( 'admin_print_styles-' . $SubMenu, 'logo_css_js' );
+    $SubMenu = add_menu_page( 'menu page', 'Change login page', 'manage_options', 'change-login-page', 'change_login_page_plugin' );
+    add_action( 'admin_print_styles-' . $SubMenu, 'change_logo_page_css_js' );
 }
 
 //load plugin required css and js fiels
-function logo_css_js() {
+function change_logo_page_css_js() {
     //js
-    // wp_enqueue_script('jquery-ui-core', includes_url('/js/jquery/ui/jquery.ui.core.min.js'), array('jquery') );
-    // wp_enqueue_script('dashboard');
-    // wp_enqueue_script( 'theme-preview' );
+    //wp_enqueue_script('jquery-ui-core', includes_url('/js/jquery/ui/jquery.ui.core.min.js'), array('jquery') );
+    wp_enqueue_script('dashboard');
+    wp_enqueue_script( 'theme-preview' );
     wp_enqueue_script('media-uploads-js',plugins_url('assets/js/js.js', __FILE__), array('media-upload','thickbox','jquery'));
 
     //color-picker css n js
@@ -40,12 +61,12 @@ function logo_css_js() {
     wp_enqueue_script( 'my-color-picker-script', plugins_url('assets/js/my-color-picker-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
     // wp_enqueue_style('my-bootstrap', plugins_url('css/wbr_login_bootstrap.css',__FILE__));
     //css
-    // wp_enqueue_style('dashboard');
-    // wp_enqueue_style('thickbox');
+    wp_enqueue_style('dashboard');
+    wp_enqueue_style('thickbox');
 }
 
 //WP Login Logo plugin admin menu page
-function webriti_login_page(){ ?>
+function change_login_page_plugin(){ ?>
     <style type="text/css">
         label {
             margin-right: 20px;
@@ -107,16 +128,6 @@ function webriti_login_page(){ ?>
         }
     </style>
     <script>
-   
-        // hide n show upload button
-        jQuery('#enable-custom-logo').click(function(){
-            if (jQuery(this).is(':checked', true)) {
-                alert(1);
-            } else {
-                alert(2);
-            }
-            
-        });
 
         //settings save js function
         function savesettings() {
@@ -267,7 +278,7 @@ var login_error = jQuery('#login_error');
     document.getElementById("error_message").style.display = "block"; 
     use = document.getElementById("user_pass");
     use.onclick = function(event) {
-        document.getElementById("error_message").style.display = "none"; 
+    document.getElementById("error_message").style.display = "none"; 
         
     }
 </script>
